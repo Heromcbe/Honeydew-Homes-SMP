@@ -308,32 +308,6 @@
 
   <footer>Honeydew Homes SMP &nbsp;·&nbsp; Bedrock Edition &nbsp;·&nbsp; Maps rendered with uNmINeD</footer>
 
-  <script>
-    // Generate fireflies
-    const container = document.querySelector('.fireflies');
-    for (let i = 0; i < 28; i++) {
-      const f = document.createElement('div');
-      f.className = 'firefly';
-      f.style.cssText = `
-        left: ${Math.random() * 100}%;
-        top: ${Math.random() * 100}%;
-        --d: ${6 + Math.random() * 10}s;
-        --delay: ${Math.random() * 8}s;
-        --tx: ${(Math.random() - 0.5) * 80}px;
-        --ty: ${-20 - Math.random() * 80}px;
-      `;
-      container.appendChild(f);
-    }
-
-// Load timestamp from generated file
-fetch('https://raw.githubusercontent.com/Heromcbe/Honeydew-Homes-SMP/master/last-updated.txt')
-  .then(r => r.text())
-  .then(text => {
-    document.getElementById('last-updated').textContent = text.trim() + ' EST';
-  })
-  .catch(() => {
-    document.getElementById('last-updated').textContent = 'unavailable';
-  });
-  </script>
+  <script>n  </script>
 </body>
 </html>
