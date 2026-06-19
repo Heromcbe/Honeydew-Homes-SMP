@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honeydew Homes SMP — World Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bark:       #3b1f0e;
+      --darkwood:   #5c2d0e;
+      --wood:       #7a4420;
+      --warm:       #c47a2b;
+      --cream:      #f5ead6;
+      --parchment:  #ede0c4;
+      --moss:       #4a6741;
+      --leaf:       #6b8f5e;
+      --mushroom:   #c0392b;
+      --glow:       #f9c74f;
+      --shadow:     rgba(30,10,0,0.55);
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'Lora', Georgia, serif;
+      background-color: var(--bark);
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    /* ── Firefly particles ── */
+    .fireflies {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .firefly {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--glow);
+      box-shadow: 0 0 6px 2px var(--glow);
+      animation: drift var(--d, 8s) ease-in-out infinite var(--delay, 0s);
+      opacity: 0;
+    }
+    @keyframes drift {
+      0%   { opacity: 0; transform: translate(0,0); }
+      20%  { opacity: 0.9; }
+      80%  { opacity: 0.6; }
+      100% { opacity: 0; transform: translate(var(--tx,30px), var(--ty,-60px)); }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem 2rem;
+      text-align: center;
+    }
+
+    .logo-ring {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 5px solid var(--warm);
+      box-shadow: 0 0 0 3px var(--darkwood), 0 0 24px 6px rgba(196,122,43,0.35);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      flex-shrink: 0;
+    }
+    .logo-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 600;
+      color: var(--glow);
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 0 40px rgba(249,199,79,0.3);
+      letter-spacing: 0.04em;
+      line-height: 1.15;
+    }
+
+    .hero-subtitle {
+      margin-top: 0.6rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--parchment);
+      opacity: 0.8;
+      letter-spacing: 0.02em;
+    }
+
+    .divider {
+      margin: 1.8rem auto 0;
+      width: 200px;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--warm), transparent);
+    }
+
+    /* ── Banner image ── */
+    .banner-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .banner-img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      object-position: center 30%;
+      border-radius: 8px;
+      border: 3px solid var(--wood);
+      box-shadow: 0 8px 32px var(--shadow);
+      display: block;
+    }
+
+    /* ── Cards section ── */
+    .cards-section {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem 4rem;
+    }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--warm);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: linear-gradient(160deg, var(--darkwood) 0%, var(--bark) 100%);
+      border: 2px solid var(--wood);
+      border-radius: 10px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--cream);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      box-shadow: 0 4px 16px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 28px var(--shadow), 0 0 16px rgba(196,122,43,0.25);
+      border-color: var(--warm);
+    }
+
+    .card-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--glow);
+      letter-spacing: 0.04em;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--parchment);
+      opacity: 0.7;
+      line-height: 1.5;
+    }
+
+    .card-btn {
+      margin-top: 0.5rem;
+      padding: 0.45rem 1.2rem;
+      background: var(--wood);
+      border: 1px solid var(--warm);
+      border-radius: 4px;
+      color: var(--cream);
+      font-family: 'Lora', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .card:hover .card-btn {
+      background: var(--warm);
+      color: var(--bark);
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.75rem;
+      font-style: italic;
+      color: var(--parchment);
+      opacity: 0.45;
+      border-top: 1px solid var(--darkwood);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .firefly { animation: none; }
+      .card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fireflies -->
+  <div class="fireflies" aria-hidden="true"></div>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="logo-ring">
+      <img src="Honeydew_Homes_Profile.jpg" alt="Honeydew Homes logo" />
+    </div>
+    <h1 class="hero-title">Honeydew Homes SMP</h1>
+    <p class="hero-subtitle">A cozy corner of the Minecraft world — explore every dimension</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- Banner -->
+  <div class="banner-wrap">
+    <img class="banner-img" src="5679380f-d2e3-4de0-bea0-9a18d6223cd3.jpg" alt="Honeydew Homes world" />
+  </div>
+
+  <!-- Dimension Cards -->
+  <section class="cards-section">
+    <p class="section-label">✦ Choose Your Dimension ✦</p>
+    <div class="cards">
+
+      <a class="card" href="overworld/index.html">
+        <div class="card-icon">🌿</div>
+        <div class="card-title">Overworld</div>
+        <div class="card-desc">Rolling hills, cozy builds, and every path we've ever wandered.</div>
+        <span class="card-btn">Open Map →</span>
+      </a>
+
+      <a class="card" href="nether/index.html">
+        <div class="card-icon">🔥</div>
+        <div class="card-title">Nether</div>
+        <div class="card-desc">The fiery depths below — highways, fortresses, and lava seas.</div>
+        <span class="card-btn">Open Map →</span>
+      </a>
+
+      <a class="card" href="end/index.html">
+        <div class="card-icon">🌑</div>
+        <div class="card-title">The End</div>
+        <div class="card-desc">Void islands and End Cities at the edge of everything.</div>
+        <span class="card-btn">Open Map →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>Honeydew Homes SMP &nbsp;·&nbsp; Bedrock Edition &nbsp;·&nbsp; Maps rendered with uNmINeD</footer>
+
+  <script>
+    // Generate fireflies
+    const container = document.querySelector('.fireflies');
+    for (let i = 0; i < 28; i++) {
+      const f = document.createElement('div');
+      f.className = 'firefly';
+      f.style.cssText = `
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        --d: ${6 + Math.random() * 10}s;
+        --delay: ${Math.random() * 8}s;
+        --tx: ${(Math.random() - 0.5) * 80}px;
+        --ty: ${-20 - Math.random() * 80}px;
+      `;
+      container.appendChild(f);
+    }
+  </script>
+</body>
+</html>
